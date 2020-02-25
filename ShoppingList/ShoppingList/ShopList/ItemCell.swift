@@ -23,25 +23,25 @@ struct ItemCell: View {
 //    var item: ItemVizualizer
     var item: Item
     
+    var delegate: (() -> Void)?
+    
     var body: some View {
         Button(action: {
             AddItemSheet.item = self.item
+            self.delegate?()
         }) {
             ZStack {
-                Rectangle().foregroundColor(Color.customRed)
                 HStack(alignment: .center) {
-                    ZStack {
-                        Rectangle().foregroundColor(Color.purple)
-                        Text("\(item.amount)")
-                            .font(.largeTitle)
-                    }.frame(width: 70, alignment: Alignment.leading)
+                    Text("\(item.amount)")
+                    .font(.largeTitle)
+                        .padding()
                     VStack(alignment: .leading) {
                         Text("\(item.name)")
                             .font(.title)
                         Text("\(item.getPriceText())")
                             .font(.subheadline)
                     }
-                }.frame(minWidth: 0, maxWidth: .infinity, alignment: Alignment.leading)
+                }.frame(minWidth: 0, maxWidth: .infinity, maxHeight: .infinity, alignment: Alignment.leading)
             }
         }
     }
@@ -53,6 +53,6 @@ struct ItemCell_Previews: PreviewProvider {
 //            ItemCell(item: ItemVizualizer(name: "Lasanha", amount: 2, price: 4.5))
             ItemCell(item: Item())
         }
-        .previewLayout(.fixed(width: 300, height: 70))
+        .previewLayout(.fixed(width: 300, height: 100))
     }
 }

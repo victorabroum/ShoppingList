@@ -40,15 +40,8 @@ struct ContentView: View {
             VStack {
                 List {
                     ForEach(allItems) { item in
-                        Button(action: {
-                            AddItemSheet.item = item
+                        ItemCell(item: item) {
                             self.shouldAddItem = true
-                        }) {
-                            HStack {
-                                Text("\(item.amount) | \(item.name)")
-                                Spacer()
-                                Text("R$ \(String(format: "%.2f", item.price))")
-                            }
                         }
                     }
                     .onDelete { indexSet in
@@ -56,7 +49,7 @@ struct ContentView: View {
                             self.managedObjectContext.delete(self.allItems[index])
                         }
                     }
-                }
+                }.background(Color.customRed)
                 Text("Total: \(String(format: "%.2f", shopListTotal))")
             }
             .navigationBarTitle("My itens")
@@ -74,6 +67,7 @@ struct ContentView: View {
                 .sheet(isPresented: $shouldAddItem) {
                     AddItemSheet().environment(\.managedObjectContext, self.managedObjectContext)
             }
+            .background(Color.customRed)
         }
     }
 }
