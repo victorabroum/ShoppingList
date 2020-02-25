@@ -15,7 +15,10 @@ struct AddItemSheet: View {
     
     @State var amount = 1;
     @State var name = ""
-    @State var price:Float = 0
+    @State var price: String = ""
+    @State var textButtonNewItem: String = "Add item"
+    
+    static var item: Item?
     
     private var intFormatter: NumberFormatter {
         let formater = NumberFormatter()
@@ -32,30 +35,56 @@ struct AddItemSheet: View {
                 }
                 
                 Section(header: Text("Do you khown the price?")) {
-                    TextField("Price", value: $price, formatter: NumberFormatter())
+                    TextField("Price", text: $price)
+                        .keyboardType(.decimalPad)
                 }
                 
                 Button(action: {
-                    print("Add Item")
+                    self.addNewItem(AddItemSheet.item)
                 }, label: {
-                    Text("Add item")
+                    Text(textButtonNewItem)
                 })
-                .navigationBarTitle("Add item")
+                .navigationBarTitle(textButtonNewItem)
             }
+        }.onAppear {
+            self.chooseItem(AddItemSheet.item)
         }
     }
     
-    private func addNewItem(_ item: Item) {
+    public func chooseItem(_ item: Item?) {
+        if let item = item {
+            name = item.name
+            price = "\(item.price)"
+            amount = Int(item.amount)
+            textButtonNewItem = "Edit item"
+        }
+    }
+    
+    private func addNewItem(_ item: Item?) {
         guard name != "" else { return }
-        let newItem = Item(context: self.managedObjectContext)
+        
+        var newItem: Item
+        
+        if item == nil {
+            newItem = Item(context: self.managedObjectContext)
+        } else {
+            newItem = item!
+        }
+        
         newItem.name = name
         newItem.amount = Int16(amount)
-        newItem.price = price
+        
+        if let priceValue = Float(price.replacingOccurrences(of: ",", with: ".")) {
+            newItem.price = priceValue
+        }
+        
         newItem.id = UUID()
         
         do {
             try self.managedObjectContext.save()
+            AddItemSheet.item = nil
             self.presentationMode.wrappedValue.dismiss()
+            print("Saved new item")
         } catch {
             print(error.localizedDescription)
         }
