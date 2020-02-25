@@ -9,8 +9,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @Environment(\.managedObjectContext) var managedObjectContext
+    
+    @State var shouldAddItem = false
+    
     var body: some View {
-        Text("Hello, World!")
+        NavigationView {
+            List {
+                Text("Sample Order")
+            }
+            .navigationBarTitle("My itens")
+            .navigationBarItems(trailing: Button(action: {
+                print("Got to add Item")
+                self.shouldAddItem = true
+            }, label: {
+                Image(systemName: "plus.circle")
+                .resizable()
+                    .frame(width: 32, height: 32, alignment: .center)
+            }))
+                .sheet(isPresented: $shouldAddItem) {
+                    AddItemSheet().environment(\.managedObjectContext, self.managedObjectContext)
+            }
+        }
     }
 }
 

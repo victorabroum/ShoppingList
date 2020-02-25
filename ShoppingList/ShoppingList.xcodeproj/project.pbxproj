@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		76B4A13F2404991100DBE46C /* AddItemSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B4A13E2404991100DBE46C /* AddItemSheet.swift */; };
 		76D4E2A82403FF21002CECAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D4E2A72403FF21002CECAD /* AppDelegate.swift */; };
 		76D4E2AA2403FF21002CECAD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D4E2A92403FF21002CECAD /* SceneDelegate.swift */; };
 		76D4E2AD2403FF21002CECAD /* ShoppingList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76D4E2AB2403FF21002CECAD /* ShoppingList.xcdatamodeld */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76B4A13E2404991100DBE46C /* AddItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemSheet.swift; sourceTree = "<group>"; };
 		76D4E2A42403FF21002CECAD /* ShoppingList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76D4E2A72403FF21002CECAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76D4E2A92403FF21002CECAD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				76D4E2B82403FF23002CECAD /* Info.plist */,
 				76D4E2AB2403FF21002CECAD /* ShoppingList.xcdatamodeld */,
 				76D4E2B22403FF23002CECAD /* Preview Content */,
+				76B4A13E2404991100DBE46C /* AddItemSheet.swift */,
 			);
 			path = ShoppingList;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			files = (
 				76D4E2AD2403FF21002CECAD /* ShoppingList.xcdatamodeld in Sources */,
 				76D4E2A82403FF21002CECAD /* AppDelegate.swift in Sources */,
+				76B4A13F2404991100DBE46C /* AddItemSheet.swift in Sources */,
 				76D4E2AF2403FF21002CECAD /* ContentView.swift in Sources */,
 				76D4E2AA2403FF21002CECAD /* SceneDelegate.swift in Sources */,
 			);
