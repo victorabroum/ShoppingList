@@ -25,5 +25,9 @@ extension Item : Identifiable {
     public func getItemTotal() -> Float {
         return Float(amount) * price
     }
+    
+    public func getPriceText() -> String {
+        return String(format: "R$ %.2f", self.price)
+    }
 
 }
