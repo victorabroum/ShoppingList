@@ -26,8 +26,21 @@ extension Item : Identifiable {
         return Float(amount) * price
     }
     
-    public func getPriceText() -> String {
-        return String(format: "R$ %.2f", self.price)
+    public static var itemVizualizer: Item {
+        let item = Item()
+        item.name = ["Lasanha", "Ovos", "Nescau"].randomElement() ?? "Pirulito"
+        item.amount = Int16.random(in: 1...10)
+        item.price = Float.random(in: 2.0...10.0)
+        return item
     }
+    
+    public static var itemListVizualizer: [Item] = [
+        Item.itemVizualizer,
+        Item.itemVizualizer,
+        Item.itemVizualizer,
+        Item.itemVizualizer,
+        Item.itemVizualizer,
+        Item.itemVizualizer
+    ]
 
 }

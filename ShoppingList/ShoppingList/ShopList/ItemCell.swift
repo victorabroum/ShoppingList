@@ -8,19 +8,8 @@
 
 import SwiftUI
 
-struct ItemVizualizer {
-    var name: String
-    var amount: Int16
-    var price: Float
-    
-    public func getPriceText() -> String {
-        return String(format: "R$ %.2f", self.price)
-    }
-}
-
 struct ItemCell: View {
     
-//    var item: ItemVizualizer
     var item: Item
     
     var delegate: (() -> Void)?
@@ -38,7 +27,7 @@ struct ItemCell: View {
                     VStack(alignment: .leading) {
                         Text("\(item.name)")
                             .font(.title)
-                        Text("\(item.getPriceText())")
+                        Text("\(item.price.getCurrency() ?? "")")
                             .font(.subheadline)
                     }
                 }.frame(minWidth: 0, maxWidth: .infinity, maxHeight: .infinity, alignment: Alignment.leading)
@@ -50,8 +39,7 @@ struct ItemCell: View {
 struct ItemCell_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-//            ItemCell(item: ItemVizualizer(name: "Lasanha", amount: 2, price: 4.5))
-            ItemCell(item: Item())
+            ItemCell(item: Item.itemVizualizer)
         }
         .previewLayout(.fixed(width: 300, height: 100))
     }

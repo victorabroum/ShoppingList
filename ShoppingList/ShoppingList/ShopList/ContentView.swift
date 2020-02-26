@@ -23,13 +23,14 @@ struct ContentView: View {
                   predicate: NSPredicate(format: "price == 0"))
     var itemsWithoutPrice: FetchedResults<Item>
     
-    @FetchRequest(entity: Item.entity(), sortDescriptors: [])
-    var allItems: FetchedResults<Item>
+    @FetchRequest(entity: Item.entity(), sortDescriptors: [],
+                  predicate:  NSPredicate(format: "price != 0"))
+    var itemsWithPrice: FetchedResults<Item>
     
     @State var shouldAddItem = false
     var shopListTotal: Float {
         var result: Float = 0
-        for item in allItems {
+        for item in itemsWithPrice {
             result += item.getItemTotal()
         }
         return result
@@ -39,18 +40,18 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(allItems) { item in
-                        ItemCell(item: item) {
+                    Section(header: CustomHeader(text: "With price")) {
+                        ListItemView(fetchedResults: itemsWithPrice) {
                             self.shouldAddItem = true
                         }
                     }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            self.managedObjectContext.delete(self.allItems[index])
+                    Section(header: CustomHeader(text: "No price")) {
+                        ListItemView(fetchedResults: itemsWithoutPrice) {
+                            self.shouldAddItem = true
                         }
                     }
-                }.background(Color.customRed)
-                Text("Total: \(String(format: "%.2f", shopListTotal))")
+                }
+                TotalPopup(total: shopListTotal)
             }
             .navigationBarTitle("My itens")
             .navigationBarItems(trailing:
@@ -67,7 +68,6 @@ struct ContentView: View {
                 .sheet(isPresented: $shouldAddItem) {
                     AddItemSheet().environment(\.managedObjectContext, self.managedObjectContext)
             }
-            .background(Color.customRed)
         }
     }
 }
@@ -75,5 +75,57 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct TotalPopup: View {
+    
+    var total: Float
+    
+    var body: some View {
+        ZStack {
+            Rectangle().foregroundColor(Color.getProgressColor(total / 400))
+            Text("Total: \(total.getCurrency() ?? "")")
+        }.frame(minWidth: 0, maxWidth: .infinity, maxHeight: 45, alignment: .center)
+    }
+}
+
+struct ListItemView: View {
+    
+    @Environment(\.managedObjectContext) var managedObjectContext
+    var fetchedResults: FetchedResults<Item>
+    
+    var clickOnCellDelegate: (()-> Void)?
+
+    var body: some View {
+        ForEach(fetchedResults) { item in
+            ItemCell(item: item) {
+                self.clickOnCellDelegate?()
+            }
+        }
+        .onDelete { indexSet in
+            for index in indexSet {
+                self.managedObjectContext.delete(self.fetchedResults[index])
+            }
+        }
+    }
+}
+
+struct CustomHeader: View {
+    
+    var text: String
+    
+    var body: some View {
+        
+        HStack {
+            Text(text)
+                .font(.headline)
+                .foregroundColor(.white)
+            .padding()
+            
+            Spacer()
+        }
+        .background(Color.customOrange)
+        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
     }
 }
