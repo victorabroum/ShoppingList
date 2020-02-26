@@ -30,7 +30,7 @@ struct ItemCell: View {
                         Text("\(item.price.getCurrency() ?? "")")
                             .font(.subheadline)
                     }
-                }.frame(minWidth: 0, maxWidth: .infinity, maxHeight: .infinity, alignment: Alignment.leading)
+                }
             }
         }
     }

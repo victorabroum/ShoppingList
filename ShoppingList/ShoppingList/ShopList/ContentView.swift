@@ -8,13 +8,6 @@
 
 import SwiftUI
 
-struct HelperItem {
-    var id: UUID
-    var name: String?
-    var amount: Int
-    var price: Float
-}
-
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) var managedObjectContext
@@ -51,7 +44,15 @@ struct ContentView: View {
                         }
                     }
                 }
-                TotalPopup(total: shopListTotal)
+                TotalPopUpView(total: shopListTotal) {
+                    for item in self.itemsWithPrice {
+                        self.managedObjectContext.delete(item)
+                    }
+                    for item in self.itemsWithoutPrice {
+                        self.managedObjectContext.delete(item)
+                    }
+                }
+                .padding()
             }
             .navigationBarTitle("My itens")
             .navigationBarItems(trailing:
@@ -75,18 +76,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-    }
-}
-
-struct TotalPopup: View {
-    
-    var total: Float
-    
-    var body: some View {
-        ZStack {
-            Rectangle().foregroundColor(Color.getProgressColor(total / 400))
-            Text("Total: \(total.getCurrency() ?? "")")
-        }.frame(minWidth: 0, maxWidth: .infinity, maxHeight: 45, alignment: .center)
     }
 }
 
@@ -121,8 +110,7 @@ struct CustomHeader: View {
             Text(text)
                 .font(.headline)
                 .foregroundColor(.white)
-            .padding()
-            
+                .padding(5)
             Spacer()
         }
         .background(Color.customOrange)

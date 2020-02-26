@@ -48,6 +48,8 @@ struct AddItemSheet: View {
             }
         }.onAppear {
             self.chooseItem(AddItemSheet.item)
+        }.onDisappear {
+            AddItemSheet.item = nil
         }
     }
     
@@ -82,7 +84,6 @@ struct AddItemSheet: View {
         
         do {
             try self.managedObjectContext.save()
-            AddItemSheet.item = nil
             self.presentationMode.wrappedValue.dismiss()
             print("Saved new item")
         } catch {
