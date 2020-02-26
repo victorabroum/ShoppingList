@@ -33,13 +33,13 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 List {
-                    Section(header: CustomHeader(text: "With price")) {
-                        ListItemView(fetchedResults: itemsWithPrice) {
+                    Section(header: CustomHeader(text: "No price")) {
+                        ListItemView(fetchedResults: itemsWithoutPrice) {
                             self.shouldAddItem = true
                         }
                     }
-                    Section(header: CustomHeader(text: "No price")) {
-                        ListItemView(fetchedResults: itemsWithoutPrice) {
+                    Section(header: CustomHeader(text: "With price")) {
+                        ListItemView(fetchedResults: itemsWithPrice) {
                             self.shouldAddItem = true
                         }
                     }
