@@ -20,6 +20,9 @@ struct ContentView: View {
                   predicate:  NSPredicate(format: "price != 0"))
     var itemsWithPrice: FetchedResults<Item>
     
+    @FetchRequest(entity: Item.entity(), sortDescriptors: [])
+    var allItems: FetchedResults<Item>
+    
     @State var shouldAddItem = false
     var shopListTotal: Float {
         var result: Float = 0
@@ -29,30 +32,48 @@ struct ContentView: View {
         return result
     }
     
+    private func deleteEntity(_ item: Item) {
+        self.managedObjectContext.delete(item)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            do {
+                try self.managedObjectContext.save()
+            }catch {
+                print("Not enable to delete item")
+            }
+        }
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
-                List {
-                    Section(header: CustomHeader(text: "No price")) {
-                        ListItemView(fetchedResults: itemsWithoutPrice) {
-                            self.shouldAddItem = true
+                if allItems.count > 0 {
+                    List {
+                        Section(header: CustomHeader(text: "No price")) {
+                            ListItemView(fetchedResults: itemsWithoutPrice) {
+                                self.shouldAddItem = true
+                            }
+                        }
+                        Section(header: CustomHeader(text: "With price")) {
+                            ListItemView(fetchedResults: itemsWithPrice) {
+                                self.shouldAddItem = true
+                            }
                         }
                     }
-                    Section(header: CustomHeader(text: "With price")) {
-                        ListItemView(fetchedResults: itemsWithPrice) {
-                            self.shouldAddItem = true
+                    TotalPopUpView(total: shopListTotal) {
+                        for item in self.allItems {
+                            self.deleteEntity(item)
                         }
                     }
-                }
-                TotalPopUpView(total: shopListTotal) {
-                    for item in self.itemsWithPrice {
-                        self.managedObjectContext.delete(item)
+                    .padding()
+                } else {
+                    VStack{
+                        Image("emptyBox")
+                        Text("No items")
+                            .font(.title)
+                        Text("Click on + to add new item")
+                            .font(.subheadline)
                     }
-                    for item in self.itemsWithoutPrice {
-                        self.managedObjectContext.delete(item)
-                    }
                 }
-                .padding()
             }
             .navigationBarTitle("My itens")
             .navigationBarItems(trailing:
@@ -95,6 +116,15 @@ struct ListItemView: View {
         .onDelete { indexSet in
             for index in indexSet {
                 self.managedObjectContext.delete(self.fetchedResults[index])
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    do {
+                        try self.managedObjectContext.save()
+                    }catch {
+                        print("Not enable to delete item")
+                    }
+                }
+                
             }
         }
     }
