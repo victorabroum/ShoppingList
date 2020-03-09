@@ -21,9 +21,14 @@ struct ItemCell: View {
         }) {
             ZStack {
                 HStack(alignment: .center) {
-                    Text("\(item.amount)")
-                    .font(.largeTitle)
-                        .padding()
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(.secondary)
+                            .frame(width: 70, height: 70, alignment: .center)
+                        Text("\(item.amount)")
+                        .font(.largeTitle)
+                            .padding()
+                    }
                     VStack(alignment: .leading) {
                         Text("\(item.name)")
                             .font(.title)
